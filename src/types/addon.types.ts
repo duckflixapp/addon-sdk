@@ -167,8 +167,8 @@ export type VideoProcessorContext = {
 };
 
 export type VideoProcessorModule = {
-    validateSource(source: RawVideoProcessorSource): Promise<void> | void;
-    identify?(input: VideoProcessorIdentifyInput): Promise<VideoMetadata | null> | VideoMetadata | null;
+    validateSource(source: RawVideoProcessorSource, context: VideoProcessorContext): Promise<void> | void;
+    identify?(input: VideoProcessorIdentifyInput, context: VideoProcessorContext): Promise<VideoMetadata | null> | VideoMetadata | null;
     start(input: VideoProcessorStartInput, context: VideoProcessorContext): Promise<VideoProcessorStartOutput> | VideoProcessorStartOutput;
 };
 
