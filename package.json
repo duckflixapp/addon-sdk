@@ -1,31 +1,32 @@
 {
-  "name": "addon-sdk",
-  "module": "src/index.ts",
-  "type": "module",
-  "license": "MIT",
-  "devDependencies": {
-    "@types/bun": "latest",
-    "prettier": "3.8.3"
-  },
-  "peerDependencies": {
-    "typescript": "^5"
-  },
-  "types": "src/index.ts",
-  "exports": {
-    ".": {
-      "types": "./src/index.ts",
-      "import": "./src/index.ts"
+    "name": "@duckflixapp/addon-sdk",
+    "version": "0.0.0",
+    "module": "src/index.ts",
+    "type": "module",
+    "private": "false",
+    "license": "MIT",
+    "devDependencies": {
+        "@types/bun": "latest",
+        "prettier": "3.8.3"
     },
-    "./types": {
-      "types": "./src/types/index.ts",
-      "import": "./src/types/index.ts"
+    "peerDependencies": {
+        "typescript": "^5"
     },
-    "./package.json": "./package.json"
-  },
-  "files": [
-    "src",
-    "README.md",
-    "LICENSE"
-  ],
-  "version": "0.0.1"
+    "types": "src/index.ts",
+    "exports": {
+        ".": {
+            "types": "./src/index.ts",
+            "import": "./src/index.ts"
+        },
+        "./types": {
+            "types": "./src/types/index.ts",
+            "import": "./src/types/index.ts"
+        },
+        "./package.json": "./package.json"
+    },
+    "files": [
+        "src",
+        "README.md",
+        "LICENSE"
+    ]
 }
