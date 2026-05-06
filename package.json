@@ -4,6 +4,12 @@
     "module": "src/index.ts",
     "type": "module",
     "license": "MIT",
+    "scripts": {
+        "build": "bun src/build.ts"
+    },
+    "bin": {
+        "duckflix-addon-build": "./src/build.ts"
+    },
     "devDependencies": {
         "@types/bun": "latest",
         "prettier": "3.8.3"
@@ -16,6 +22,10 @@
         ".": {
             "types": "./src/index.ts",
             "import": "./src/index.ts"
+        },
+        "./build": {
+            "types": "./src/build.ts",
+            "import": "./src/build.ts"
         },
         "./types": {
             "types": "./src/types/index.ts",

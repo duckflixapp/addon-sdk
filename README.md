@@ -17,8 +17,23 @@ If the package is published under a scoped name later, replace `addon-sdk` with 
 ```ts
 import { SDK, videoProcessor } from 'addon-sdk';
 
-const sdk = new SDK({
-    capabilities: ['video.processor'] as const,
+export const sdk = new SDK({
+    id: 'example-video-addon',
+    name: 'Example Video Addon',
+    version: '0.1.0',
+    runtime: 'bun',
+    entry: 'index.js',
+    permissions: ['filesystem:job'],
+    capabilities: [
+        {
+            kind: 'video.processor',
+            processor: {
+                id: 'example-video-addon',
+                initialStatus: 'processing',
+                sourceTypes: ['file'],
+            },
+        },
+    ],
 });
 
 export default sdk.createModule({
@@ -94,17 +109,66 @@ The manifest and module export should agree. If the manifest declares `video.pro
 
 ## API
 
-### `new SDK(options)`
+### `new SDK(manifest)`
 
-Creates a module builder for the capabilities your addon declares.
+Creates a module builder from the full addon manifest.
 
 ```ts
-const sdk = new SDK({
-    capabilities: ['video.processor'] as const,
+export const sdk = new SDK({
+    id: 'example-video-addon',
+    name: 'Example Video Addon',
+    version: '0.1.0',
+    runtime: 'bun',
+    entry: 'index.js',
+    capabilities: [
+        {
+            kind: 'video.processor',
+            processor: {
+                id: 'example-video-addon',
+                sourceTypes: ['file'],
+            },
+        },
+    ],
 });
 ```
 
-Use `as const` so TypeScript keeps the exact capability names and `createModule` can require the matching implementations.
+The SDK derives the module capability keys from `manifest.capabilities`, so `createModule` can require the matching implementations.
+
+### `sdk.generateManifest(outputPath)`
+
+Writes the configured manifest to disk. By default it creates `./dist/manifest.json`.
+
+```ts
+await sdk.generateManifest();
+```
+
+This is intended for addon build scripts.
+
+### `buildAddon(options)`
+
+Bundles the package entrypoint declared in `package.json` as `main` or `module`.
+
+```ts
+import { buildAddon } from 'addon-sdk/build';
+import { sdk } from './src/addon';
+
+await buildAddon({ manifest: sdk });
+```
+
+The helper uses Bun build, writes to `./dist` by default, targets `bun`, and keeps common backend libraries external.
+When `manifest` is provided, it also writes `dist/manifest.json`.
+
+Addons can also run the packaged CLI directly:
+
+```json
+{
+    "scripts": {
+        "build": "duckflix-addon-build --manifest"
+    }
+}
+```
+
+With `--manifest`, the CLI imports the addon entrypoint from `package.json` and looks for an exported `sdk`, `manifest`, or default export.
 
 ### `sdk.createModule(module)`
 
