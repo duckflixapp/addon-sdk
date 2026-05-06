@@ -1,5 +1,7 @@
 export type {
     AddonCapability,
+    AddonErrorOptions,
+    AddonErrorFactory,
     AddonKind,
     AddonManifest,
     AddonPermission,

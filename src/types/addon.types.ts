@@ -146,7 +146,17 @@ export type CancellableDownload = {
     cancel(): Promise<void> | void;
 };
 
+export type AddonErrorOptions = {
+    cause?: unknown;
+    statusCode?: number;
+    headers?: Record<string, string>;
+    details?: Record<string, unknown>;
+};
+
+export type AddonErrorFactory = (message: string, options?: AddonErrorOptions) => Error;
+
 export type VideoProcessorContext = {
+    error: AddonErrorFactory;
     workspace?: AddonWorkspace;
     emit(event: VideoProcessorEvent): Promise<void> | void;
     download: {
