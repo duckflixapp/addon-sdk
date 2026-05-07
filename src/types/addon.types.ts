@@ -90,21 +90,46 @@ export type EpisodeMetadata = {
 
 export type VideoMetadata = MovieMetadata | EpisodeMetadata;
 
+export type VideoProcessorScanInput = {
+    source: PreparedVideoProcessorSource;
+    requestedType: VideoType;
+    dbUrl?: string;
+};
+
+export type VideoProcessorScanItem = {
+    id: string;
+    source: PreparedVideoProcessorSource;
+    requestedType?: VideoType;
+    title?: string;
+    metadata?: VideoMetadata | null;
+};
+
 export type VideoProcessorIdentifyInput = {
     source: PreparedVideoProcessorSource;
     requestedType: VideoType;
+    dbUrl?: string;
 };
 
-export type VideoProcessorStartInput = {
+export type VideoProcessorStartItem = {
+    id: string;
+    videoId: string;
     metadata: VideoMetadata;
     source: PreparedVideoProcessorSource;
 };
 
-export type VideoProcessorStartOutput = {
+export type VideoProcessorStartInput = {
+    source: PreparedVideoProcessorSource;
+    items: VideoProcessorStartItem[];
+};
+
+export type VideoProcessorStartOutputItem = {
+    id: string;
     path: string;
     fileName: string;
     fileSize: number;
 };
+
+export type VideoProcessorStartOutput = VideoProcessorStartOutputItem[];
 
 export type DownloadProgress = {
     percent: number;
@@ -168,6 +193,7 @@ export type VideoProcessorContext = {
 
 export type VideoProcessorModule = {
     validateSource(source: RawVideoProcessorSource, context: VideoProcessorContext): Promise<void> | void;
+    scan(input: VideoProcessorScanInput, context: VideoProcessorContext): Promise<VideoProcessorScanItem[]> | VideoProcessorScanItem[];
     identify?(input: VideoProcessorIdentifyInput, context: VideoProcessorContext): Promise<VideoMetadata | null> | VideoMetadata | null;
     start(input: VideoProcessorStartInput, context: VideoProcessorContext): Promise<VideoProcessorStartOutput> | VideoProcessorStartOutput;
 };
