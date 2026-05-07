@@ -88,7 +88,49 @@ export type EpisodeMetadata = {
     episodeNumber: number;
 };
 
+export type SeriesMetadata = {
+    type: 'series';
+    title: string;
+    overview?: string | null;
+    posterUrl?: string | null;
+    bannerUrl?: string | null;
+    genres: string[];
+    rating: number | null;
+    imdbId: string | null;
+    tmdbShowId: number;
+    seasonCount: number;
+    episodeCount: number;
+};
+
+export type SeasonMetadata = {
+    type: 'season';
+    name: string;
+    overview?: string | null;
+    airDate?: Date | null;
+    posterUrl?: string | null;
+    rating: number | null;
+    imdbId: string | null;
+    tmdbId: number | null;
+    tmdbShowId: number;
+    seasonNumber: number;
+    episodeCount: number;
+};
+
 export type VideoMetadata = MovieMetadata | EpisodeMetadata;
+export type MetadataResolveResult = VideoMetadata | SeriesMetadata | SeasonMetadata;
+
+export type MetadataResolveInput = {
+    dbUrl: string;
+    requestedType?: VideoType;
+};
+
+export type MetadataHost = {
+    resolve(input: MetadataResolveInput): Promise<MetadataResolveResult | null>;
+};
+
+export type AddonHost = {
+    metadata: MetadataHost;
+};
 
 export type VideoProcessorScanInput = {
     source: PreparedVideoProcessorSource;
@@ -181,6 +223,7 @@ export type AddonErrorOptions = {
 export type AddonErrorFactory = (message: string, options?: AddonErrorOptions) => Error;
 
 export type VideoProcessorContext = {
+    host: AddonHost;
     error: AddonErrorFactory;
     workspace?: AddonWorkspace;
     emit(event: VideoProcessorEvent): Promise<void> | void;
